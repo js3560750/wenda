@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+        
+<mapper namespace="com.nowcoder.dao.FeedDAO">		<!-- 新鲜事 -->
+    <sql id="table">feed</sql>
+    <sql id="selectFields">id, created_date,user_id, data, type
+    </sql>
+    <select id="selectUserFeeds" resultType="com.nowcoder.model.Feed"><!-- resultType是返回类型 -->
+        SELECT
+        <include refid="selectFields"/>
+        FROM
+        <include refid="table"/>
+
+        WHERE id &lt; #{maxId}	<!-- &lt;是小于号的意思，这里是当id小于maxId时 -->
+
+        <if test="userIds.size() != 0">	<!-- 根据传进来的userIds是否为null进行不同的操作，如果是登录用户，userIds不为null -->
+            AND user_id in
+            <!-- 这个foreach语句的意思是生成 以（开头，以）结尾，中间用，逗号分隔，每个元素是userIds里的item -->
+            <foreach item="item" index="index" collection="userIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY id DESC
+        LIMIT #{count}
+    </select>
+</mapper>

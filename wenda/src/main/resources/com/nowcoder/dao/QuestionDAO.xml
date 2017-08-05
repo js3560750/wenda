@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nowcoder.dao.QuestionDAO">	<!-- 这里标注了对应方法的具体位置 -->
+    <sql id="table">question</sql>	<!-- 设置表名，以方便在下面的语句中使用 -->
+    <sql id="selectFields">id, title, content, comment_count,created_date,user_id
+    </sql>	<!-- 设置查询字段名 -->
+   <select id="selectLatestQuestions" resultType="com.nowcoder.model.Question"> <!-- 要与 QuestionDAO.java里的方法名称一一匹配 -->
+        SELECT
+        <include refid="selectFields"/>
+        FROM
+        <include refid="table"/>
+
+        <if test="userId != 0">	<!-- MyBatis自带的可选的判断语句 -->
+            WHERE user_id = #{userId}
+        </if>
+        ORDER BY id DESC
+        LIMIT #{offset},#{limit}
+    </select>
+</mapper>
