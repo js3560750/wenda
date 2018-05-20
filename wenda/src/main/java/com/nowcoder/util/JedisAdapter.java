@@ -367,6 +367,7 @@ public class JedisAdapter implements InitializingBean{
         print(16, jedis.hexists(userKey, "age"));
         print(17, jedis.hkeys(userKey));	//获得所有的键名
         print(18, jedis.hvals(userKey));	//获得所有的键值
+        print(181,jedis.hlen(userKey));		//获取哈希表中字段的数量
         jedis.hsetnx(userKey, "school", "zju");	//如果不存在school键名，则增加school=zju,若school这个键名已经有了，则什么都不做
         jedis.hsetnx(userKey, "name", "yxy");
         print(19, jedis.hgetAll(userKey));
@@ -409,6 +410,7 @@ public class JedisAdapter implements InitializingBean{
         jedis.zadd(rankKey, 90, "Lee");
         jedis.zadd(rankKey, 75, "Lucy");
         jedis.zadd(rankKey, 80, "Mei");
+        jedis.zrem(rankKey, "Mei");
         print(30, jedis.zcard(rankKey));
         print(31, jedis.zcount(rankKey, 61, 100));	//61分到100分的个数
         print(32, jedis.zscore(rankKey, "Lucy"));
